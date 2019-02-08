@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -27,33 +27,26 @@ public class ProductSearchControllerAcceptanceTest {
     public void search_returnsProducts() throws Exception {
 
         mockMvc.perform(get("/api/products?search=tv"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("[\n" +
-                    "  {\n" +
-                    "    \"name\": \"LG\",\n" +
-                    "    \"description\": \"LG Golden eye television\",\n" +
-                    "    \"categories\": [\n" +
-                    "      \"smart phone\",\n" +
-                    "      \"electronics\",\n" +
-                    "      \"video\",\n" +
-                    "      \"tv\"\n" +
-                    "    ],\n" +
-                    "    \"averageRating\": 3.7,\n" +
-                    "    \"totalRatings\": 10.0\n" +
-                    "  },\n" +
-                    "  {\n" +
-                    "    \"name\": \"Samsung 3d\",\n" +
-                    "    \"description\": \"Samsung three dimensional television\",\n" +
-                    "    \"categories\": [\n" +
-                    "      \"smart phone\",\n" +
-                    "      \"electronics\",\n" +
-                    "      \"video\",\n" +
-                    "      \"tv\",\n" +
-                    "      \"3d\"\n" +
-                    "    ],\n" +
-                    "    \"averageRating\": 4.7,\n" +
-                    "    \"totalRatings\": 209.0\n" +
-                    "  }\n" +
-                    "]"));
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$.[0]").exists())
+            .andExpect(jsonPath("$.[0].name").value("LG"))
+            .andExpect(jsonPath("$.[0].description").value("LG Golden eye television"))
+            .andExpect(jsonPath("$.[0].categories[0]").value("electronics"))
+            .andExpect(jsonPath("$.[0].categories[1]").value("video"))
+            .andExpect(jsonPath("$.[0].categories[2]").value("tv"))
+            .andExpect(jsonPath("$.[0].averageRating").value("3.7"))
+            .andExpect(jsonPath("$.[0].totalRatings").value("10"))
+            .andExpect(jsonPath("$.[0].imageBytes").exists())
+            .andExpect(jsonPath("$.[1]").exists())
+            .andExpect(jsonPath("$.[1].name").value("Samsung 3d"))
+            .andExpect(jsonPath("$.[1].description").value("Samsung three dimensional television"))
+            .andExpect(jsonPath("$.[1].categories[0]").value("electronics"))
+            .andExpect(jsonPath("$.[1].categories[1]").value("video"))
+            .andExpect(jsonPath("$.[1].categories[2]").value("tv"))
+            .andExpect(jsonPath("$.[1].categories[3]").value("3d"))
+            .andExpect(jsonPath("$.[1].averageRating").value("4.7"))
+            .andExpect(jsonPath("$.[1].totalRatings").value("209"))
+            .andExpect(jsonPath("$.[1].imageBytes").exists());
     }
 }
