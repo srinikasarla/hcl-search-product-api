@@ -1,5 +1,6 @@
-package com.hcl.hackathon.fullstack.service;
+package com.hcl.hackathon.fullstack.pesristance;
 
+import com.hcl.hackathon.fullstack.service.ImageService;
 import org.junit.Before;
 import org.junit.Test;
 
